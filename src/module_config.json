@@ -1,0 +1,31 @@
+{
+  "version": "2.1.0",
+  "log_prefix": "[人格守护演化·2.1.0]",
+  "compatible": {
+    "openclaw": ">=3.0.0",
+    "context-engine": ">=1.0.0"
+  },
+  "test_config": {
+    "enableGatewayRestartTest": true,
+    "testTimeout": 30000,
+    "testWorkspace": "gateway-test-workspace",
+    "testPersonality": "稳定亲和，逻辑清晰，擅长耐心解答日常问题，语气温和不生硬，保持一致的交互风格"
+  },
+  "prompt_config": {
+    "lock_tag": "[SYSTEM:PERSONALITY_GUARDED]",
+    "current_personality_prompt": "根据源人格、长期倾向、短期风格、相关记忆，生成稳定连贯的当前人格，语言简洁贴合AI交互场景",
+    "new_target_prompt": "从当前人格中精准拆分长期倾向和短期风格，各不超过100字，严格按格式输出",
+    "evolution_llm": "",
+    "evolution_temperature": 0.1,
+    "max_evolution_length": 350
+  },
+  "evolve": {
+    "minIntervalMinutes": 30,
+    "minTurns": 5,
+    "similarityThreshold": 0.3
+  },
+  "log_config": {
+    "iteration_folder": "personality_iteration_logs",
+    "snapshot_keep_count": 20
+  }
+}

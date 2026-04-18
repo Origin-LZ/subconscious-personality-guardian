@@ -1,0 +1,15 @@
+{
+  "name": "subconscious-personality-guardian",
+  "version": "2.1.0",
+  "main": "handler.js",
+  "type": "commonjs",
+  "description": "OpenClaw Context Engine 人格守护插件（内置网关重启测试）",
+  "keywords": ["openclaw", "context-engine", "plugin", "personality", "guardian"],
+  "author": "your-name",
+  "license": "MIT",
+  "openclaw": {
+    "entry": "handler.js",
+    "contextEngine": true,
+    "hooks": ["init", "beforeTurn", "afterTurn"]
+  }
+}
