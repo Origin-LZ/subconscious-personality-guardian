@@ -1,6 +1,6 @@
 {
-  "version": "2.1.0",
-  "log_prefix": "[人格守护演化·2.1.0]",
+  "version": "2.2.0",
+  "log_prefix": "[人格守护演化·2.2.0]",
   "compatible": {
     "openclaw": ">=3.0.0",
     "context-engine": ">=1.0.0"
@@ -20,12 +20,16 @@
     "max_evolution_length": 350
   },
   "evolve": {
-    "minIntervalMinutes": 30,
-    "minTurns": 5,
-    "similarityThreshold": 0.3
+    "minIntervalMinutes": 120,
+    "minTurns": 10,
+    "similarityThreshold": 0.3,
+
+    "memoryDiffThreshold": 0.4,
+    "memoryKeepCount": 30
   },
   "log_config": {
     "iteration_folder": "personality_iteration_logs",
-    "snapshot_keep_count": 20
+    "snapshot_keep_count": 20,
+    "memory_snapshot_keep_count": 30
   }
 }
