@@ -6,10 +6,12 @@
    "openclaw": {
     "entry": "handler.js",
     "compat": {
-      "pluginApi": ">=2026.4.14"
+      "pluginApi": ">=2026.4.14-beta.1",
+      "minGatewayVersion": "2026.4.14-beta.1"
     },
     "build": {
-      "openclawVersion": "2026.4.14"
+      "openclawVersion": "2026.4.14-beta.1",
+      "pluginSdkVersion": "2026.4.14-beta.1"
     }
   },
   "description": "OpenClaw Context Engine 人格守护插件（内置网关重启测试）",
