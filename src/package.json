@@ -3,8 +3,13 @@
   "version": "2.2.0",
   "main": "handler.js",
   "type": "commonjs",
-   "openclaw": {
+  "description": "OpenClaw Context Engine 人格守护插件（内置网关重启测试）",
+  "keywords": ["openclaw", "context-engine", "plugin", "personality", "guardian"],
+  "author": "Origin-LZ",
+  "license": "MIT",
+  "openclaw": {
     "entry": "handler.js",
+    "contextEngine": true,
     "compat": {
       "pluginApi": ">=2026.4.14-beta.1",
       "minGatewayVersion": "2026.4.14-beta.1"
@@ -13,15 +18,6 @@
       "openclawVersion": "2026.4.14-beta.1",
       "pluginSdkVersion": "2026.4.14-beta.1"
     }
-  },
-  "description": "OpenClaw Context Engine 人格守护插件（内置网关重启测试）",
-  "keywords": ["openclaw", "context-engine", "plugin", "personality", "guardian"],
-  "author": "your-name",
-  "license": "MIT",
-  "openclaw": {
-    "entry": "handler.js",
-    "contextEngine": true,
-    "hooks": ["init", "beforeTurn", "afterTurn"]
   }
 }
 
