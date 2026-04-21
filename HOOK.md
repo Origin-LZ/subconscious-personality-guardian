@@ -1,6 +1,6 @@
 ---
 name: subconscious-personality-guardian
-version: 2.1.0
+version: 2.4.0-beta.1
 description: 适配OpenClaw最新Context Engine，人格守护与演化插件（内置网关重启测试）
 hookVersion: 2.0.0
 contextEngine: true

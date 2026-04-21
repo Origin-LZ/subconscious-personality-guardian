@@ -12,7 +12,7 @@ const config = require('./module_config.json');
 const plugin = {
     name: 'subconscious-personality-guardian',
     version: config.version,
-    description: '潜意识人格守护与演化插件 v2.2.0',
+    description: '潜意识人格守护与演化插件 2.4.0-beta.1',
     author: 'your-name',
     contextEngine: true,
     compatible: config.compatible,
