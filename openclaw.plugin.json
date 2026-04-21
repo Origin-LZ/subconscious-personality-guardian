@@ -3,7 +3,6 @@
   "name": "潜意识人格守护与演化插件",
   "version": "2.2.0-beta.3",
   "description": "适配OpenClaw最新Context Engine，人格防篡改、分层固化、记忆检索、快照回滚、MEMORY.md同步（内置网关重启测试）",
-  //"kind": "memory",
   "enabledByDefault": true,
   "compatible": {
     "openclaw": ">=3.0.0",
