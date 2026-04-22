@@ -1,4 +1,4 @@
-import { version } from './package.json' assert { type: 'json' };
+import { version } from './package.json' with { type: 'json' };
 import fs from 'fs/promises';
 import fsSync from 'fs';
 import path from 'path';
