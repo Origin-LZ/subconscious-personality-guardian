@@ -6,8 +6,13 @@ export default definePluginEntry({
   id: "subconscious-personality-guardian",
   name: "潜意识人格守护与演化插件",
   description: "人格防篡改、分层固化、记忆检索、快照回滚、MEMORY.md同步",
+
   register(api) {
     // 注册生命周期钩子
+    if (!plugin) {
+      console.error('Plugin not loaded correctly');
+      return;
+    }
     api.registerHook('init', plugin.init.bind(plugin));
     api.registerHook('beforeTurn', plugin.beforeTurn.bind(plugin));
     api.registerHook('afterTurn', plugin.afterTurn.bind(plugin));
