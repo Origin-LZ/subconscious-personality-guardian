@@ -1,8 +1,8 @@
-const { version } = require('./package.json');
-const fs = require('fs/promises');
-const fsSync = require('fs');
-const path = require('path');
-const config = require('./module_config.json');
+import { version } from './package.json' assert { type: 'json' };
+import fs from 'fs/promises';
+import fsSync from 'fs';
+import path from 'path';
+import config from './module_config.json';
 
 const plugin = {
     name: 'subconscious-personality-guardian',
