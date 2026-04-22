@@ -13,8 +13,8 @@ export default definePluginEntry({
       console.error('Plugin not loaded correctly');
       return;
     }
-    api.registerHook('init', plugin.init.bind(plugin));
-    api.registerHook('beforeTurn', plugin.beforeTurn.bind(plugin));
-    api.registerHook('afterTurn', plugin.afterTurn.bind(plugin));
+    api.registerHook('init', plugin.init.bind(plugin), { name: "personality_init" });
+    api.registerHook('beforeTurn', plugin.beforeTurn.bind(plugin), { name: "personality_beforeTurn" });
+    api.registerHook('afterTurn', plugin.afterTurn.bind(plugin), { name: "personality_afterTurn" });
   },
 });
