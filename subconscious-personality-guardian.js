@@ -312,8 +312,12 @@ ${currentPersonality}`;
     async beforeTurn(context) {
         if (!context || !context.agent) return;
         const { id: agentId } = context.agent;
-        const cache = this.agentCaches.get(agentId);
-        if (!cache) return;
+        let cache = this.agentCaches.get(agentId);
+        if (!cache) {
+            await this.init(context);
+            cache = this.agentCaches.get(agentId);
+            if (!cache) return;
+        };
         
         try {
             const soulContent = await fs.readFile(cache.soulPath, 'utf8');
