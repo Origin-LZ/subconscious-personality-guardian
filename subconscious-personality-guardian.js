@@ -1,9 +1,4 @@
-// ==============================
-// 适配 OpenClaw >=3.0.0 / Context Engine >=1.0.0
-// 潜意识人格守护与演化插件 v2.2.0（已修复3个核心问题）
-// 核心：人格不由智能体控制，由独立潜意识模块维护
-// 设计思想在 Claude 代码泄露前已完整形成
-// ==============================
+const { version } = require('./package.json');
 const fs = require('fs/promises');
 const fsSync = require('fs');
 const path = require('path');
@@ -11,11 +6,10 @@ const config = require('./module_config.json');
 
 const plugin = {
     name: 'subconscious-personality-guardian',
-    version: config.version,
-    description: '潜意识人格守护与演化插件 2.4.0-beta.1',
-    author: 'your-name',
+    version: version,
+    description: '潜意识人格守护与演化插件',
+    author: 'Origin-LZ',
     contextEngine: true,
-    compatible: config.compatible,
 
     agentCaches: new Map(),
 
@@ -68,10 +62,10 @@ const plugin = {
             const file = path.join(folder, this.generateFileName('memory'));
             fsSync.writeFileSync(file, memoryContent, 'utf8');
             this.cleanupOldMemorySnapshots(context);
-            this.writeOpLog(context, 'info', `✅ 记忆快照已保存：${path.basename(file)}`);
+            this.writeOpLog(context, 'info', `记忆快照已保存: ${path.basename(file)}`);
             return true;
         } catch (e) {
-            this.writeOpLog(context, 'error', `❌ 记忆快照保存失败：${e.message}`);
+            this.writeOpLog(context, 'error', `记忆快照保存失败: ${e.message}`);
             return false;
         }
     },
@@ -89,10 +83,10 @@ const plugin = {
             if (files.length > keep) {
                 const delFiles = files.slice(keep);
                 delFiles.forEach(f => fsSync.unlinkSync(path.join(folder, f)));
-                this.writeOpLog(context, 'info', `🧹 记忆快照清理完成，保留最新 ${keep} 个`);
+                this.writeOpLog(context, 'info', `记忆快照清理完成，保留最新 ${keep} 个`);
             }
         } catch (e) {
-            this.writeOpLog(context, 'error', `❌ 记忆快照清理失败：${e.message}`);
+            this.writeOpLog(context, 'error', `记忆快照清理失败: ${e.message}`);
         }
     },
 
@@ -107,7 +101,7 @@ const plugin = {
     writeOpLog(context, level, msg) {
         if (!context || !context.logger) return;
         const { id: agentId } = context.agent;
-        const logMsg = `[${this.formatTime()}] [${agentId}] ${config.log_prefix}：${msg}`;
+        const logMsg = `[${this.formatTime()}] [${agentId}] ${config.log_prefix}: ${msg}`;
         switch (level) {
             case 'info': context.logger.info(logMsg); break;
             case 'warn': context.logger.warn(logMsg); break;
@@ -130,7 +124,7 @@ const plugin = {
             const file = path.join(folder, this.generateFileName('iter'));
             const content = `# 源人格\n${source || '未设置'}\n\n# 长期倾向\n${long || '未生成'}\n\n# 短期风格\n${short || '未生成'}\n\n# 现行人格\n${current || '未生成'}\n\n# 生成时间\n${this.formatTime()}`;
             fsSync.writeFileSync(file, content, 'utf8');
-            this.writeOpLog(context, 'info', `📝 人格迭代日志已生成`);
+            this.writeOpLog(context, 'info', `人格迭代日志已生成`);
         } catch (e) {}
     },
 
@@ -143,7 +137,7 @@ const plugin = {
             const file = path.join(folder, this.generateFileName('snapshot'));
             fsSync.writeFileSync(file, content, 'utf8');
             this.cleanupOldSnapshots(context);
-            this.writeOpLog(context, 'info', `📸 人格快照已保存`);
+            this.writeOpLog(context, 'info', `人格快照已保存`);
             return true;
         } catch (e) {
             return false;
@@ -194,7 +188,7 @@ const plugin = {
             } else {
                 fsSync.appendFileSync(memoryFile, syncContent, 'utf8');
             }
-            this.writeOpLog(context, 'info', `🔗 稳定人格已同步至 MEMORY.md`);
+            this.writeOpLog(context, 'info', `稳定人格已同步至 MEMORY.md`);
         } catch (e) {}
     },
 
@@ -281,41 +275,46 @@ ${currentPersonality}`;
         if (!context || !context.agent) return;
         const { id: agentId, workspace } = context.agent;
         const soulPath = path.join(workspace, 'soul.md');
-        this.agentCaches.set(agentId, {
-            soulPath,
-            sourcePersonality: '',
-            targetLongTerm: '',
-            targetShortTerm: '',
-            evolveCount: 0,
-            lastEvolveTime: 0, // 修复：初始化为0，第一次可快速演化
-            lastSyncMemory: 0,
-            failCount: 0,
-            lastMemoryContent: ''
-        });
+        
+        if (!this.agentCaches.has(agentId)) {
+            this.agentCaches.set(agentId, {
+                soulPath,
+                sourcePersonality: '',
+                targetLongTerm: '',
+                targetShortTerm: '',
+                evolveCount: 0,
+                lastEvolveTime: 0,
+                lastSyncMemory: 0,
+                failCount: 0,
+                lastMemoryContent: ''
+            });
+        }
+        
         try {
             await fs.access(soulPath);
             const c = await fs.readFile(soulPath, 'utf8');
-            if (c.trim()) this.agentCaches.get(agentId).sourcePersonality = c.trim();
+            if (c.trim()) {
+                this.agentCaches.get(agentId).sourcePersonality = c.trim();
+            }
         } catch {
             await fs.writeFile(soulPath, '稳定自然，温和友好，连贯一致的AI交互风格', 'utf8', { mode: 0o755 });
         }
-        this.writeOpLog(context, 'info', `🚀 插件初始化完成 v${config.version}`);
+        
+        await this.writeOpLog(context, 'info', `插件初始化完成 v${version}`);
 
         if (config.test_config?.enableGatewayRestartTest) {
             this.runGatewayRestartTest(context).catch(err => {
-                this.writeOpLog(context, 'error', `❌ 网关测试失败：${err.message}`);
+                this.writeOpLog(context, 'error', `网关测试失败: ${err.message}`);
             });
         }
     },
 
-    // ==============================
-    // beforeTurn 修复：只清理自己注入的块，不破坏原生 prompt
-    // ==============================
     async beforeTurn(context) {
         if (!context || !context.agent) return;
         const { id: agentId } = context.agent;
         const cache = this.agentCaches.get(agentId);
-        if (!cache) { await this.init(context); return; }
+        if (!cache) return;
+        
         try {
             const soulContent = await fs.readFile(cache.soulPath, 'utf8');
             const trimContent = soulContent.trim();
@@ -326,23 +325,18 @@ ${currentPersonality}`;
             cache.sourcePersonality = trimContent;
             const tag = config.prompt_config.lock_tag;
 
-            // 修复：只清理上一次插件注入的人格块，保留系统原有prompt
             if (context.systemPrompt) {
                 const regex = new RegExp(`\\n?\\s*${tag}[\\s\\S]*?${tag}`, 'g');
                 context.systemPrompt = context.systemPrompt.replace(regex, '').trim();
             }
 
-            // 安全追加
             context.systemPrompt = (context.systemPrompt || '') + `\n\n${tag}\n# AI 人格规范\n${trimContent}\n${tag}`;
-            this.writeOpLog(context, 'info', '✅ 人格防篡改注入成功');
+            await this.writeOpLog(context, 'info', '人格防篡改注入成功');
         } catch (e) {
-            this.writeOpLog(context, 'error', `❌ 人格注入失败：${e.message}`);
+            await this.writeOpLog(context, 'error', `人格注入失败: ${e.message}`);
         }
     },
 
-    // ==============================
-    // afterTurn 修复：记忆差异使用完整 MEMORY.md
-    // ==============================
     async afterTurn(context) {
         if (!context || !context.agent || !context.userMessage || !context.botReply) return;
         const { id: agentId } = context.agent;
@@ -355,17 +349,16 @@ ${currentPersonality}`;
             if (snap) {
                 await fs.writeFile(cache.soulPath, snap, 'utf8');
                 cache.sourcePersonality = snap;
-                this.writeOpLog(context, 'info', `✅ 人格已回滚至最新快照`);
+                await this.writeOpLog(context, 'info', '人格已回滚至最新快照');
             }
             return;
         }
 
-        // 修复：获取完整记忆，而非片段记忆
         const currentMemory = await this.getFullMemoryContent(context);
         const lastMemory = cache.lastMemoryContent || '';
         const memoryDiff = this.calcMemoryDiff(lastMemory, currentMemory);
 
-        this.writeOpLog(context, 'info', `📊 整体记忆差异：${memoryDiff}`);
+        await this.writeOpLog(context, 'info', `整体记忆差异: ${memoryDiff}`);
         this.saveMemorySnapshot(context, currentMemory);
         cache.lastMemoryContent = currentMemory;
 
@@ -376,11 +369,11 @@ ${currentPersonality}`;
         const diffCondition = memoryDiff >= diffThreshold;
 
         if (!timeCondition || !diffCondition) {
-            this.writeOpLog(context, 'info', `⏳ 未满足演化条件：时间(${timeCondition}) 差异(${diffCondition})`);
+            await this.writeOpLog(context, 'info', `未满足演化条件: 时间(${timeCondition}) 差异(${diffCondition})`);
             return;
         }
 
-        this.writeOpLog(context, 'info', `🟢 双条件满足，开始人格演化`);
+        await this.writeOpLog(context, 'info', '双条件满足，开始人格演化');
         try {
             const relatedMem = await this.searchRelatedMemory(context, userMsg);
             const current = await this.generateCurrentPersonality(context, cache, relatedMem);
@@ -404,13 +397,13 @@ ${currentPersonality}`;
             cache.lastEvolveTime = now;
             cache.failCount = 0;
 
-            this.writeOpLog(context, 'info', `✅ 人格演化完成，已固化`);
+            await this.writeOpLog(context, 'info', '人格演化完成，已固化');
         } catch (e) {
             cache.failCount++;
             const fb = this.getFallbackPersonality(userMsg);
             cache.targetLongTerm = fb.long;
             cache.targetShortTerm = fb.short;
-            this.writeOpLog(context, 'error', `❌ 演化失败：${e.message}`);
+            await this.writeOpLog(context, 'error', `演化失败: ${e.message}`);
         }
     },
 
@@ -419,7 +412,7 @@ ${currentPersonality}`;
         const testWs = path.join(__dirname, testCfg.testWorkspace);
         const testP = testCfg.testPersonality;
 
-        this.writeOpLog(context, 'info', `🔍 网关重启测试启动`);
+        await this.writeOpLog(context, 'info', '网关重启测试启动');
         const mock = {
             ...context, agent: { ...context.agent, workspace: testWs },
             userMessage: '你好', botReply: '你好呀',
@@ -440,16 +433,16 @@ ${currentPersonality}`;
             await fs.writeFile(path.join(testWs, 'soul.md'), testP, 'utf8');
             await this.beforeTurn(mock);
             const cache = this.agentCaches.get(context.agent.id);
-            cache.sourcePersonality = testP;
+            if (cache) cache.sourcePersonality = testP;
             const mem = await this.searchRelatedMemory(mock, mock.userMessage);
             const cur = await this.generateCurrentPersonality(mock, cache, mem);
             await this.splitLongAndShort(mock, cur);
             this.saveSnapshot(mock, cur);
             this.saveMemorySnapshot(mock, mem);
             this.writeIterationLog(mock, testP, 'long', 'short', cur);
-            this.writeOpLog(context, 'info', `🎉 网关重启测试全部通过`);
+            await this.writeOpLog(context, 'info', '网关重启测试全部通过');
         } catch (e) {
-            this.writeOpLog(context, 'error', `❌ 测试失败：${e.message}`);
+            await this.writeOpLog(context, 'error', `测试失败: ${e.message}`);
         }
     }
 };

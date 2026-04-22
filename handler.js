@@ -3,7 +3,13 @@ const plugin = require('./subconscious-personality-guardian.js');
 
 // 新版引擎要求导出 register 和 activate 函数
 function register(api) {
-    // 注册钩子标识
+    // 注册生命周期钩子 - 这是关键！
+    api.registerHook('init', plugin.init.bind(plugin));
+    api.registerHook('beforeTurn', plugin.beforeTurn.bind(plugin));
+    api.registerHook('afterTurn', plugin.afterTurn.bind(plugin));
+    
+    // 如果你的插件提供了任何工具，也在这里注册
+    // api.registerTool({ name: '...', ... });
     return plugin;
 }
 
@@ -16,15 +22,4 @@ async function activate(context) {
 module.exports = {
     register,
     activate,
-    // 保留原有属性，确保兼容
-    name: plugin.name,
-    version: plugin.version,
-    description: plugin.description,
-    author: plugin.author,
-    contextEngine: plugin.contextEngine,
-    hooks: {
-        beforeTurn: plugin.beforeTurn.bind(plugin),
-        afterTurn: plugin.afterTurn.bind(plugin),
-        init: plugin.init.bind(plugin)
-    }
 };

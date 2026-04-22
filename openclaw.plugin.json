@@ -1,20 +1,12 @@
 {
   "id": "subconscious-personality-guardian",
   "name": "潜意识人格守护与演化插件",
-  "version": "2.4.0-beta.1",
   "description": "适配OpenClaw最新Context Engine，人格防篡改、分层固化、记忆检索、快照回滚、MEMORY.md同步（内置网关重启测试）",
   "enabledByDefault": true,
-  "compatible": {
-    "openclaw": ">=3.0.0",
-    "context-engine": ">=1.0.0"
-  },
+  "kind": "hook-only",
   "configSchema": {
     "type": "object",
     "additionalProperties": false,
     "properties": {}
-  },
-  "contracts": {
-    "tools": ["memory_search"],
-    "contextHooks": ["init", "beforeTurn", "afterTurn"]
   }
 }
