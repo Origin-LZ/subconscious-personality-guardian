@@ -1,4 +1,3 @@
-// 适配 OpenClaw >=3.0.0 / Context Engine >=1.0.0
 import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
 import plugin from './subconscious-personality-guardian.js';
 
@@ -13,8 +12,11 @@ export default definePluginEntry({
       console.error('Plugin not loaded correctly');
       return;
     }
-    api.registerHook('init', plugin.init.bind(plugin), { name: "personality_init" });
     api.registerHook('before_prompt_build', plugin.beforeTurn.bind(plugin), { name: "personality_beforeTurn" });
     api.registerHook('afterTurn', plugin.afterTurn.bind(plugin), { name: "personality_afterTurn" });
   },
 });
+async function activate(context) {
+    await plugin.init(context);
+    return plugin;
+}
