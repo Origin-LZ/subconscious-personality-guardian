@@ -14,7 +14,7 @@ export default definePluginEntry({
       return;
     }
     api.registerHook('init', plugin.init.bind(plugin), { name: "personality_init" });
-    api.registerHook('beforeTurn', plugin.beforeTurn.bind(plugin), { name: "personality_beforeTurn" });
+    api.registerHook('before_prompt_build', plugin.beforeTurn.bind(plugin), { name: "personality_beforeTurn" });
     api.registerHook('afterTurn', plugin.afterTurn.bind(plugin), { name: "personality_afterTurn" });
   },
 });
